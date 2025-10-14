@@ -1,37 +1,33 @@
-# AI Agent Marketplace Prototype (Snapshot)
+# Heist Agent Marketplace
 
-Short brief for Codex CLI implementers.
+Production-ready scaffold for the Heist AI agent marketplace and orchestration console.
 
-## What We’re Building
+## Overview
 - Marketplace for specialized AI agents with a concierge hiring assistant.
 - Core flow: landing prompt → auth gate → onboarding → comparison view → agent profile → waitlist.
+- Supabase-backed orchestrator tools log telemetry for guardrails and auditing.
 
-## Must-Have Screens
-1. **Landing** – Lovable-style hero, persistent prompt input, curated categories.
-2. **Auth & Onboarding** – Supabase OAuth (Google/GitHub) followed by quick role/industry/use-case/budget form.
-3. **Comparison View** – 3–5 agents side-by-side with fit %, differentiators, filters (industry, fit threshold, deployment speed).
-4. **Agent Profile** – Overview, tooling stack, pricing, endorsements, badges.
-5. **Waitlist CTA** – Form captures email + notes, shows confirmation state.
+## Getting Started
+1. Install dependencies with `pnpm install`.
+2. Copy `.env.example` to `.env.local` and add Supabase credentials.
+3. Run the dev server with `pnpm dev`.
+4. Execute `pnpm lint` before pushing changes.
 
-## Agentic Recommendation Engine
-- **Orchestrator Agent:** LLM-driven with tools `search_agents`, `inspect_agent_profile`, `evaluate_fit`, optional `ask_follow_up`.
-- **Data Source:** Supabase Postgres + pgvector (keep `search_agents` interface swappable for future vector DB).
-- **Guardrails:** Enforce hard constraints (compliance, pricing) via SQL filters; log tool calls for observability.
+## Available Scripts
+- `pnpm dev` – start Next.js with hot reload.
+- `pnpm build` – create an optimized production build.
+- `pnpm start` – run the compiled app in production mode.
+- `pnpm lint` – run ESLint with Next.js and Tailwind rules.
+- `pnpm test` – execute Vitest unit suites (add specs under `tests/`).
+- `pnpm test:e2e` – run Playwright smoke tests for the authenticated journey.
 
-## Tech Stack
-- **Frontend:** Next.js (App Router) + TypeScript + Tailwind + shadcn/ui. Zustand for local prompt state, TanStack Query for data fetching.
-- **Backend:** Supabase Auth, Postgres tables (`profiles`, `agents`, `agent_tags`, `agent_endorsements`, `search_sessions`, `waitlist`, `agent_embeddings`). Edge Functions expose orchestrator tools.
-- **Design:** Figma MCP to sync design tokens/components.
+## Project Structure
+- `app/` – App Router entries grouped as public, auth, and protected experiences.
+- `components/` – Shared UI primitives such as `AgentCard` and `PromptInput`.
+- `lib/` – Cross-cutting utilities and React hooks.
+- `stores/` – Zustand slices for local state.
+- `supabase/` – Database migrations, generated types, and Edge Functions.
+- `design/` – Design tokens and MCP exports.
+- `tests/` – Vitest and Playwright suites mirroring the source tree.
 
-## Implementation Priorities
-1. Provision Supabase project, enable pgvector, seed initial agent metadata + embeddings.
-2. Scaffold Next.js app with protected routes and shared PromptInput/AgentCard components.
-3. Implement orchestrator agent service + tool RPCs, surface comparison results in UI.
-4. Capture analytics + feedback events for prompt usage and waitlist conversions.
-
-## Testing & QA
-- Manual validation of prompt → recommendation → waitlist flow.
-- Add Playwright smoke test for authenticated journey when time permits.
-
-## Status
-- Planning stage; no automated tests yet.
+Refer to `.agent/README.md` for the full documentation index, including SOPs and system design notes.
