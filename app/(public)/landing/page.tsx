@@ -63,7 +63,7 @@ export default function LandingPage() {
         ))}
       </section>
 
-      <section className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 backdrop-blur">
+      <section className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 backdrop-blur-sm">
         <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div className="space-y-2">
             <h2 className="text-2xl font-semibold">Ready to build?</h2>

@@ -38,7 +38,7 @@ export default function PromptInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full flex-col gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 shadow-sm backdrop-blur md:flex-row md:items-center md:gap-4"
+      className="flex w-full flex-col gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 shadow-xs backdrop-blur-sm md:flex-row md:items-center md:gap-4"
     >
       {label ? (
         <label htmlFor="prompt-input" className="text-sm font-medium text-zinc-200">
@@ -48,7 +48,7 @@ export default function PromptInput({
       <div className="flex w-full flex-1 items-center gap-3">
         <input
           id="prompt-input"
-          className="flex-1 rounded-md border border-transparent bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-600 focus:outline-none focus:ring-2 focus:ring-zinc-600"
+          className="flex-1 rounded-md border border-transparent bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-600 focus:outline-hidden focus:ring-2 focus:ring-zinc-600"
           placeholder={placeholder}
           value={value}
           onChange={(event) => setValue(event.target.value)}

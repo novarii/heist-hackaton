@@ -1,15 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@config "../tailwind.config.ts";
+@import "tailwindcss";
 
 :root {
   color-scheme: light dark;
 }
 
 body {
-  font-family: theme("fontFamily.sans");
-  background-color: theme("colors.zinc.950");
-  color: theme("colors.zinc.100");
+  font-family: var(--font-sans);
+  background-color: var(--color-zinc-950);
+  color: var(--color-zinc-100);
 }
 
 a {
