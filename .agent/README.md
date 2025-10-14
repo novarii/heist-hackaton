@@ -1,8 +1,12 @@
+## Documentation Index
 
-# Documentation Index
+### System
+- `System/project_architecture.md` – Current application architecture, tech stack, routing, and testing notes.
 
-- `Tasks/` – Product requirements and implementation plans for in-flight features.
-- `System/` – Current system overview, including architecture, tech stack, and data schema.
-- `SOP/` – Operational runbooks (migrations, route scaffolding, Supabase workflows).
+### SOP
+- _(pending)_ – Add runbooks for migrations, route scaffolding, and Supabase workflows as they are defined.
 
-Recent update: Next.js App Router scaffold landed with public, auth, and protected route groups plus shared UI primitives as of this commit.
+### Tasks
+- _(pending)_ – Capture PRDs and implementation plans for active features.
+
+Last updated: Next.js scaffold established with public, auth, and protected route groups plus shared UI primitives.
