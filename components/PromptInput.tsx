@@ -1,24 +1,26 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Image from "next/image";
 
 type PromptInputProps = {
-  label?: string;
   placeholder?: string;
   submitLabel?: string;
   defaultValue?: string;
+  showAgentSelector?: boolean;
   onSubmit?: (value: string) => void | Promise<void>;
 };
 
 export default function PromptInput({
-  label,
-  placeholder,
-  submitLabel = "Submit",
+  placeholder = "Ask Merak to hire you your new accountant...",
+  submitLabel: _submitLabel,
   defaultValue = "",
+  showAgentSelector = false,
   onSubmit,
 }: PromptInputProps) {
   const [value, setValue] = useState(defaultValue);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,31 +38,61 @@ export default function PromptInput({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex w-full flex-col gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 shadow-xs backdrop-blur-sm md:flex-row md:items-center md:gap-4"
-    >
-      {label ? (
-        <label htmlFor="prompt-input" className="text-sm font-medium text-zinc-200">
-          {label}
-        </label>
-      ) : null}
-      <div className="flex w-full flex-1 items-center gap-3">
-        <input
-          id="prompt-input"
-          className="flex-1 rounded-md border border-transparent bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-zinc-600 focus:outline-hidden focus:ring-2 focus:ring-zinc-600"
-          placeholder={placeholder}
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          disabled={isSubmitting}
+    <form onSubmit={handleSubmit} className="relative mx-auto w-full max-w-3xl">
+      <div className="rounded-[34px] border border-black bg-white/5 px-8 py-10 shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.08)] backdrop-blur-[2.5px]">
+        <div className="relative flex items-center gap-4">
+          <div className="relative size-8 shrink-0">
+            <div className="absolute inset-[-26%] overflow-hidden rounded-full">
+              <Image src="/landing/ellipse-4.png" alt="" fill className="object-cover" />
+            </div>
+          </div>
+
+          {showAgentSelector ? (
+            <button
+              type="button"
+              className="shrink-0 transition hover:opacity-100"
+              onClick={() =>
+                setSelectedAgent((previous) => (previous ? null : "Random Agent"))
+              }
+            >
+              <Image
+                src="/landing/arrow-chevron-down.svg"
+                alt="Select agent"
+                width={24}
+                height={24}
+                className="opacity-80"
+              />
+            </button>
+          ) : null}
+
+          <input
+            className="flex-1 bg-transparent font-saprona text-xl text-neutrals-6 placeholder:text-neutrals-6 focus:text-white focus:outline-none"
+            placeholder={placeholder}
+            value={value}
+            onChange={(event) => setValue(event.target.value)}
+            disabled={isSubmitting}
+          />
+
+          {showAgentSelector ? (
+            <div className="shrink-0 rounded-2xl border border-neutral-500 bg-[rgba(221,221,222,0.2)] px-4 py-1.5 shadow-[inset_1px_1px_2.1px_1px_rgba(255,255,255,0.25)]">
+              <span className="font-saprona text-base text-neutrals-4">
+                {selectedAgent ?? "Random Agent"}
+              </span>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute -left-32 -top-16 size-80">
+        <Image src="/landing/chain-left.png" alt="" fill className="object-contain" />
+      </div>
+      <div className="pointer-events-none absolute -right-32 -top-16 size-80">
+        <Image
+          src="/landing/chain-right.png"
+          alt=""
+          fill
+          className="object-contain"
         />
-        <button
-          type="submit"
-          className="inline-flex items-center rounded-md bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
-          disabled={isSubmitting || !value.trim()}
-        >
-          {isSubmitting ? "Working…" : submitLabel}
-        </button>
       </div>
     </form>
   );

@@ -12,4 +12,4 @@
 - `Tasks/npm-install-error-check.md` – Log for latest `npm install` verification (no issues detected).
 - `Tasks/landing-page-redesign.md` – Comprehensive refactoring guide for new landing page design from Figma.
 
-Last updated: Added landing page redesign implementation guide.
+Last updated: Documented Merak landing architecture refresh.

@@ -49,11 +49,11 @@ Download the following images from Figma API and place them in `public/landing/`
 mkdir -p public/landing
 
 # Assets to download:
-- dust.png (background texture overlay)
-- ellipse-18.png (hero glow effect)
-- chain-left.png (left decorative chain)
-- chain-right.png (right decorative chain)
-- ellipse-4.png (small circular accent)
+- dust.svg (background texture overlay)
+- ellipse-18.svg (hero glow effect)
+- chain-left.svg (left decorative chain)
+- chain-right.svg (right decorative chain)
+- ellipse-4.svg (small circular accent)
 - arrow-chevron-down.svg (dropdown indicator)
 ```
 
@@ -276,7 +276,7 @@ export default function PromptInput({
           <div className="relative size-8 shrink-0">
             <div className="absolute inset-[-26%] overflow-hidden rounded-full">
               <Image
-                src="/landing/ellipse-4.png"
+                src="/landing/ellipse-4.svg"
                 alt=""
                 fill
                 className="object-cover"
@@ -324,7 +324,7 @@ export default function PromptInput({
       {/* Decorative chains */}
       <div className="pointer-events-none absolute -left-32 -top-16 size-80">
         <Image
-          src="/landing/chain-left.png"
+          src="/landing/chain-left.svg"
           alt=""
           fill
           className="object-contain"
@@ -332,7 +332,7 @@ export default function PromptInput({
       </div>
       <div className="pointer-events-none absolute -right-32 -top-16 size-80">
         <Image
-          src="/landing/chain-right.png"
+          src="/landing/chain-right.svg"
           alt=""
           fill
           className="object-contain"
@@ -370,7 +370,7 @@ export default function HeroSection() {
         <div className="relative size-full">
           <div className="absolute inset-[-170%]">
             <Image
-              src="/landing/ellipse-18.png"
+              src="/landing/ellipse-18.svg"
               alt=""
               fill
               className="object-contain"
@@ -384,7 +384,7 @@ export default function HeroSection() {
         {/* Heading */}
         <h1 className="mb-8 font-garamond text-[95px] leading-none text-neutrals-2 text-shadow-hero">
           <span>Find your </span>
-          <span className="bg-red-white-gradient bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#ff7676] to-white bg-clip-text text-transparent">
             Intelligence
           </span>
         </h1>
