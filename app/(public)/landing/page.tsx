@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AgentCard from "components/AgentCard";
-import PromptInput from "components/PromptInput";
+import PromptHero from "./_components/PromptHero";
 
 const demoAgents = [
   {
@@ -37,14 +37,7 @@ export default function LandingPage() {
             the governance of enterprise platforms.
           </p>
         </div>
-        <PromptInput
-          label="Ask the builder"
-          placeholder="What can I automate with Heist?"
-          submitLabel="Generate workflow"
-          onSubmit={async (prompt) => {
-            console.log("Prompt submitted:", prompt);
-          }}
-        />
+        <PromptHero />
         <div className="flex flex-wrap gap-4 text-sm text-zinc-400">
           <span>No credit card required</span>
           <span>—</span>

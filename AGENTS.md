@@ -34,3 +34,5 @@ Follow the existing concise, imperative commit style (`Condense README for hando
 
 ## Supabase & Configuration Notes
 Never commit `.env` files. Document required environment variables in `.env.example`. Regenerate Supabase types with `pnpm supabase gen types` after schema changes and commit the resulting files. Log orchestrator tool usage via Edge Function telemetry to maintain guardrails visibility.
+
+**Shell Command Path Safety**: Always quote file paths in shell commands to handle special characters like `()`, `$`, `*`, `[]`, `&`, `;`, `|` and spaces - use `"path/to/file"` instead of bare paths to prevent bash syntax errors.Retry
