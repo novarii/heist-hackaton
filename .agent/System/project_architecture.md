@@ -5,7 +5,7 @@ The codebase scaffolds a marketing-to-console funnel for the Heist AI agent mark
 
 ## Tech Stack Snapshot
 - **Runtime**: Next.js `15.5.4` (App Router) with React `19.2.0` and TypeScript `5.9.3` in strict mode.
-- **Styling**: Tailwind CSS `4.1.14` (CSS-first pipeline) with `tailwindcss-textshadow` and `tailwind-merge`.
+- **Styling**: Tailwind CSS `4.1.14` (CSS-first pipeline) with custom utilities defined via `@theme`/`@utility` and `tailwind-merge`.
 - **State**: Zustand `5.0.8` slices for client-side data.
 - **Date utilities**: `date-fns` `3.6.0` for formatting in agent cards.
 - **Tooling**: ESLint `9.36.0`, Vitest `3.0.0`, Playwright `1.55.1`, pnpm `8.15.6`.
@@ -38,7 +38,7 @@ The codebase scaffolds a marketing-to-console funnel for the Heist AI agent mark
 - `lib/hooks/useIsClient.ts` – Hydration guard hook (currently unused but ready for SSR-sensitive logic).
 
 ## Styling System & Assets
-- Tailwind 4 is configured via `@import "tailwindcss";` in `app/globals.css`, with palette and typography tokens defined in `tailwind.config.ts`. Custom utilities such as `bg-dust-pattern`, `bg-red-white-gradient`, and `text-shadow-hero` still rely on `theme.extend`. Tailwind’s CSS-first approach expects `@theme` declarations; utilities compile but at runtime gradients/text shadows render as `none` (tracked in `.agent/Tasks/fix-dust-overlay.md`).
+- Tailwind 4 is configured via `@import "tailwindcss";` in `app/globals.css`. Palette and typography tokens remain in `tailwind.config.ts`, while custom background and text-shadow utilities now live in CSS: `@theme` defines tokens and `@utility` maps the legacy class names (`bg-dust-pattern`, `bg-red-white-gradient`, `text-shadow-hero`) so the dust overlay and gradients render correctly at runtime (see `.agent/Tasks/fix-dust-overlay.md` for the original regression).
 - Background art and icons live under `public/landing/`. Matching `.png` assets support Next Image usage in the hero.
 - Fonts default to CSS variables `--font-saprona` / `--font-garamond`; actual licensed Saprona faces are pending. Body copy forces dark background `#1B1D21`.
 
@@ -62,7 +62,7 @@ The codebase scaffolds a marketing-to-console funnel for the Heist AI agent mark
 No SQL migrations or database tables are defined. Planned entities include `agents`, related tags, waitlist captures, and session telemetry, but they remain speculative until Supabase integration begins. Schema work should be accompanied by new SOPs once prioritised.
 
 ## Outstanding Gaps & Housekeeping
-- **Visual tokens**: migrate custom gradient, background image, and text-shadow utilities to Tailwind 4’s `@theme` / `@utility` system to restore dust overlay + typography effects.
+- **Visual QA**: confirm the restored dust overlay and gradients across responsive breakpoints and capture artifacts for regression tests.
 - **Brand consistency**: align naming across marketing (“Merak”), console (“Heist”), and metadata to avoid user confusion.
 - **Unused scaffolding**: `stores/useAgentStore.ts`, `lib/hooks/useIsClient.ts`, and empty root files (`handles`, `merges`, `vitest`) are safe to prune or wire up when functionality lands.
 - **Static assets**: `app/(public)/landing/page.tsx.backup` and the stray `82cf973b-b4a0-4126-a2aa-3646a4baac48.svg:Zone.Identifier` file appear to be export artefacts; remove or document if not required.

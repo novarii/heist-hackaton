@@ -1,7 +1,7 @@
 ## Documentation Index
 
 ### System
-- `System/project_architecture.md` – Up-to-date view of routing, shared modules, styling system, and outstanding gaps for the Heist/Merak stack.
+- `System/project_architecture.md` – Up-to-date view of routing, shared modules, Tailwind 4 theming tokens, and outstanding gaps for the Heist/Merak stack.
 
 ### SOP
 - `SOP/debug-vitest-runner-failure.md` – Diagnose and unblock Vitest runner import resolution issues.
