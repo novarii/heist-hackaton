@@ -1,6 +1,4 @@
 import type { Config } from "tailwindcss";
-import tailwindcssTextshadow from "tailwindcss-textshadow";
-
 const config: Config = {
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -26,19 +24,11 @@ const config: Config = {
         saprona: ["var(--font-saprona)", "sans-serif"],
         garamond: ["var(--font-garamond)", "var(--font-apple-garamond)", "serif"],
       },
-      backgroundImage: {
-        "red-white-gradient": "linear-gradient(to right, #ff7676, #ffffff)",
-        "dust-pattern": "url('/landing/dust.png')",
-      },
       backdropBlur: {
         "2.5": "2.5px",
       },
-      textShadow: {
-        hero: "7px 7px 5px rgba(0, 0, 0, 0.25)",
-      },
     },
   },
-  plugins: [tailwindcssTextshadow],
 };
 
 export default config;

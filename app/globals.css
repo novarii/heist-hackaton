@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme {
+  --background-image-dust-pattern: url("/landing/dust.png");
+  --background-image-red-white-gradient: linear-gradient(to right, #ff7676, #ffffff);
+  --text-shadow-hero: 7px 7px 5px rgba(0, 0, 0, 0.25);
+}
+
 :root {
   color-scheme: dark;
   --font-saprona: "Saprona", sans-serif;
@@ -23,4 +29,16 @@ a {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+@utility bg-dust-pattern {
+  background-image: var(--background-image-dust-pattern);
+}
+
+@utility bg-red-white-gradient {
+  background-image: var(--background-image-red-white-gradient);
+}
+
+@utility text-shadow-hero {
+  text-shadow: var(--text-shadow-hero);
 }
