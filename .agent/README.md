@@ -4,9 +4,11 @@
 - `System/project_architecture.md` – Current application architecture, tech stack, routing, and testing notes.
 
 ### SOP
-- _(pending)_ – Add runbooks for migrations, route scaffolding, and Supabase workflows as they are defined.
+- `SOP/debug-vitest-runner-failure.md` – Steps to diagnose and resolve Vitest runner import resolution issues.
+- `SOP/resolve-react-version-mismatch.md` – Workflow for fixing React version drift across lockfiles.
+- `SOP/isolate-client-handlers-from-server-components.md` – Guidance for separating client event handlers from Server Components.
 
 ### Tasks
-- _(pending)_ – Capture PRDs and implementation plans for active features.
+- `Tasks/npm-install-error-check.md` – Log for latest `npm install` verification (no issues detected).
 
-Last updated: Next.js scaffold established with public, auth, and protected route groups plus shared UI primitives.
+Last updated: Added Server/Client component boundary SOP and refreshed index.
