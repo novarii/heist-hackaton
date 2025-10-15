@@ -31,3 +31,17 @@ Production-ready scaffold for the Heist AI agent marketplace and orchestration c
 - `tests/` – Vitest and Playwright suites mirroring the source tree.
 
 Refer to `.agent/README.md` for the full documentation index, including SOPs and system design notes.
+
+## Documentation
+- **System**
+  - `.agent/System/project_architecture.md` – Architecture, routing, styling, and known gaps for the current stack.
+- **SOP**
+  - `.agent/SOP/debug-vitest-runner-failure.md` – Debug playbook for Vitest runner import issues.
+  - `.agent/SOP/resolve-react-version-mismatch.md` – Steps to reconcile React version drift.
+  - `.agent/SOP/isolate-client-handlers-from-server-components.md` – Guardrails for Server/Client component boundaries.
+- **Tasks**
+  - `.agent/Tasks/dependency-version-update.md` – Notes from the 2025-10-14 dependency uplift.
+  - `.agent/Tasks/dependency-version-audit.md` – Pre-upgrade dependency inventory.
+  - `.agent/Tasks/fix-dust-overlay.md` – Tailwind 4 dust overlay investigation.
+  - `.agent/Tasks/landing-page-redesign.md` – Implementation plan for the landing hero.
+  - `.agent/Tasks/npm-install-error-check.md` – Latest npm install verification log.

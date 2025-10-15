@@ -1,15 +1,18 @@
 ## Documentation Index
 
 ### System
-- `System/project_architecture.md` – Current application architecture, tech stack, routing, and testing notes.
+- `System/project_architecture.md` – Up-to-date view of routing, shared modules, styling system, and outstanding gaps for the Heist/Merak stack.
 
 ### SOP
-- `SOP/debug-vitest-runner-failure.md` – Steps to diagnose and resolve Vitest runner import resolution issues.
-- `SOP/resolve-react-version-mismatch.md` – Workflow for fixing React version drift across lockfiles.
-- `SOP/isolate-client-handlers-from-server-components.md` – Guidance for separating client event handlers from Server Components.
+- `SOP/debug-vitest-runner-failure.md` – Diagnose and unblock Vitest runner import resolution issues.
+- `SOP/resolve-react-version-mismatch.md` – Reconcile React version drift across lockfiles and package managers.
+- `SOP/isolate-client-handlers-from-server-components.md` – Best practices for keeping client handlers out of Server Components.
 
-### Tasks
-- `Tasks/npm-install-error-check.md` – Log for latest `npm install` verification (no issues detected).
-- `Tasks/landing-page-redesign.md` – Comprehensive refactoring guide for new landing page design from Figma.
+### Tasks & Postmortems
+- `Tasks/dependency-version-update.md` – Notes from the 2025-10-14 upgrade to Next 15, React 19, Tailwind 4, and supporting tooling.
+- `Tasks/dependency-version-audit.md` – Pre-upgrade audit of dependency drift and recommended sequencing.
+- `Tasks/fix-dust-overlay.md` – Investigation into Tailwind 4 custom gradient/background regressions.
+- `Tasks/landing-page-redesign.md` – Blueprint for implementing the Merak landing hero and supporting components.
+- `Tasks/npm-install-error-check.md` – Confirmation of clean `npm install` run (baseline health check).
 
-Last updated: Documented Merak landing architecture refresh.
+Last updated: Refreshed architecture summary and indexed new Tailwind/Turbopack task notes.
