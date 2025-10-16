@@ -18,4 +18,4 @@
 - `Tasks/backend-schema-api-plan.md` – Backend Supabase schema plan with phased API rollout milestones.
 - `Tasks/landing-n8n-webhook.md` – Notes on integrating the landing prompt flow with the n8n webhook pipeline.
 
-Last updated: Documented Phase 1 Supabase schema migrations and indexed backend planning artifacts.
+Last updated: Recorded Phase 2 Supabase service clients, n8n webhook helper, and prompt cookie utilities.

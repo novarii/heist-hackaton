@@ -9,7 +9,7 @@
 - **Runtime**: Next.js `15.5.4` (App Router) with React `19.2.0` and strict TypeScript `5.9.3`.
 - **Styling**: Tailwind CSS `4.1.14` using the CSS-first pipeline (`@import "tailwindcss"`) plus `tailwind-merge` to dedupe classes. A legacy `tailwindcss-textshadow` dependency remains installed but utility classes are now provided manually in CSS.
 - **State**: Client-only Zustand slice (`stores/useAgentStore.ts`) prepared for agent state but currently unused.
-- **Utilities**: `date-fns` for relative timestamps in agent cards; `clsx` + `tailwind-merge` exposed through `lib/utils.ts`.
+- **Utilities**: `date-fns` for relative timestamps; `clsx` + `tailwind-merge` exposed via `lib/utils.ts`; Supabase access handled through `@supabase/ssr` (App Router session client) and `@supabase/supabase-js` (service-role operations).
 - **Tooling**: ESLint 9 (flat config), Vitest 3, Playwright 1.55, pnpm 8.15.6, PostCSS with `@tailwindcss/postcss`.
 
 ## Application Structure
@@ -36,6 +36,11 @@
 - `lib/utils.ts` – `cn` helper combining `clsx` and `tailwind-merge`.
 - `lib/hooks/useIsClient.ts` – hydration guard returning `true` after mount; currently unused.
 - `stores/useAgentStore.ts` – Zustand store with `agents`, `addAgent`, and `updateStatus` helpers ready for Supabase-backed data.
+- **Backend helpers**
+  - `lib/supabase/server.ts` – wraps `createServerClient` from `@supabase/ssr`, wiring cookie get/set as recommended in Supabase’s 2025 App Router guide so server components, route handlers, and server actions can reuse authenticated GoTrue sessions.
+  - `lib/supabase/service-client.ts` – singleton `createClient` bound to the service-role key (`SUPABASE_SECRET_KEY`), guarded against browser execution and configured with non-persistent auth for privileged writes (e.g. logging).
+  - `lib/integrations/n8n.ts` – `triggerN8nWebhook` helper that retries transient errors with exponential backoff, annotates attempts, and persists request/response JSON into `integration_events` via the service client.
+  - `lib/cookies/prompt.ts` – Signed cookie utilities (`setPromptCookie`, `readPromptCookie`, `clearPromptCookie`) storing a prompt/session identifier using an HMAC (`PROMPT_COOKIE_SECRET`) with expiry metadata to bridge anonymous → authenticated flows.
 
 ## Styling & Assets
 - `app/globals.css` defines theme tokens via `@theme` (dust pattern, gradient, hero text-shadow) and exposes matching classes with `@utility`. Body styling locks the dark palette (`#1B1D21`) and sets font variables.
@@ -56,6 +61,9 @@
   - `20250218121500_phase1_rls.sql` enables RLS everywhere, introduces `auth_is_service_role()` for privileged checks, and codifies policies: public read access for visible agents/tags, self-scoped profile reads/updates, owner-scoped comparison reads, and service-role-only writes for prompts linkage, waitlist, and integration logs.
 - `supabase/types/database.types.ts` is generated and mirrors the new schema, exposing typed helpers (`Tables`, `TablesInsert`, `Enums`, etc.) plus the `_InternalSupabase` metadata. Vector columns currently emit as `string` (Supabase CLI default); update consumer typings if you prefer a custom vector type wrapper.
 - Edge Functions remain undeployed; expand `supabase/functions/` when admin tooling or webhook handlers are required.
+- Application code now centralises service credentials:
+  - `.env.example` enumerates `PROMPT_COOKIE_SECRET`, `N8N_WEBHOOK_URL`, and optional `N8N_WEBHOOK_AUTH_TOKEN` alongside the Supabase URL/publishable key pair and service-role secret.
+  - Backend helpers expect these values at runtime; missing env variables throw explicit errors to fail fast in CI or serverless deployments.
 
 ## Database Schema (Supabase)
 - **profiles** — `id uuid` FK to `auth.users`, `role user_role`, `company`, `company_size company_size`, `focus_industries text[]`, `onboarding_status onboarding_status`, timestamp trigger. RLS: self-select/update; service role handles inserts/deletes.
@@ -77,6 +85,7 @@
 - `lib/hooks/useIsClient.ts` and `stores/useAgentStore.ts` are unused; integrate or trim to avoid dead code once Supabase wiring begins.
 - Landing copy still references Lorem Ipsum and placeholder links; replace with production messaging alongside Supabase integration.
 - Visual QA should confirm the dust pattern and gradients across breakpoints; capture baselines for future regression testing.
+- Rotate `PROMPT_COOKIE_SECRET` and n8n auth tokens periodically; both values protect user linking flows and integration audit logs. Service-role key must remain server-only—consider storing in Vercel environment secrets or Supabase Vault before production.
 
 ## Related Docs
 - `.agent/README.md` – Documentation index.
