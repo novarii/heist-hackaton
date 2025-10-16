@@ -15,5 +15,7 @@
 - `Tasks/fix-dust-overlay.md` – Investigation into Tailwind 4 custom gradient/background regressions.
 - `Tasks/landing-page-redesign.md` – Blueprint for implementing the Merak landing hero and supporting components.
 - `Tasks/npm-install-error-check.md` – Confirmation of clean `npm install` run (baseline health check).
+- `Tasks/backend-schema-api-plan.md` – Backend Supabase schema plan with phased API rollout milestones.
+- `Tasks/landing-n8n-webhook.md` – Notes on integrating the landing prompt flow with the n8n webhook pipeline.
 
-Last updated: Refreshed architecture summary and indexed new Tailwind/Turbopack task notes.
+Last updated: Documented Phase 1 Supabase schema migrations and indexed backend planning artifacts.

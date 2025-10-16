@@ -3,7 +3,7 @@
 ## Product & Scope
 - Marketing funnel introduces the “Merak” brand while the authenticated console still displays “Heist Console”, highlighting an ongoing rebrand.
 - Core journey today: `/` → `redirect("/landing")` → cinematic landing hero → static onboarding checklist (`/onboarding`) → stubbed agents dashboard (`/agents`).
-- Supabase is the planned backend (auth, Postgres, Edge Functions) but no runtime integration has shipped yet; pages render purely static copy.
+- Supabase now owns the source of truth for profiles, anonymous prompts, agent catalog, recommendation sessions, waitlist intent, and integration telemetry. The Next.js app has not yet wired these APIs, but migrations and RLS rules are in place.
 
 ## Tech Stack Snapshot
 - **Runtime**: Next.js `15.5.4` (App Router) with React `19.2.0` and strict TypeScript `5.9.3`.
@@ -50,9 +50,22 @@
 
 ## Data & Supabase Readiness
 - `.env.example` expects `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SECRET_KEY`; legacy anon/service-role keys remain commented for migration reference.
-- Supabase scaffolding (`supabase/migrations`, `supabase/functions`, `supabase/types`) is empty aside from directory placeholders, signalling no schema or edge functions yet.
-- `supabase/README.md` covers the intended workflow for migrations and type generation. Regenerate types with `pnpm supabase gen types` once schemas exist.
-- Database schema is currently undefined. Planned entities include agents, tags, waitlist captures, and telemetry tables; add migrations + documentation when designs are finalised.
+- Supabase migrations now define Phase 1 of the backend:
+  - `20250218120000_phase1_core.sql` enables `pgcrypto`/`vector`, creates enums (`user_role`, `company_size`, `onboarding_status`, `agent_visibility`, `waitlist_status`), registers the shared `set_updated_at` trigger, and provisions `profiles`, `anonymous_prompts`, `agents`, `agent_tags`, and `agent_tag_map`.
+  - `20250218120500_phase1_extensions.sql` adds `agent_endorsements`, `comparison_sessions`, `comparison_candidates`, `waitlist_entries`, and `integration_events` with fit-score and status guards plus provider/reference indexes.
+  - `20250218121500_phase1_rls.sql` enables RLS everywhere, introduces `auth_is_service_role()` for privileged checks, and codifies policies: public read access for visible agents/tags, self-scoped profile reads/updates, owner-scoped comparison reads, and service-role-only writes for prompts linkage, waitlist, and integration logs.
+- `supabase/types/database.types.ts` is generated and mirrors the new schema, exposing typed helpers (`Tables`, `TablesInsert`, `Enums`, etc.) plus the `_InternalSupabase` metadata. Vector columns currently emit as `string` (Supabase CLI default); update consumer typings if you prefer a custom vector type wrapper.
+- Edge Functions remain undeployed; expand `supabase/functions/` when admin tooling or webhook handlers are required.
+
+## Database Schema (Supabase)
+- **profiles** — `id uuid` FK to `auth.users`, `role user_role`, `company`, `company_size company_size`, `focus_industries text[]`, `onboarding_status onboarding_status`, timestamp trigger. RLS: self-select/update; service role handles inserts/deletes.
+- **anonymous_prompts** — captures pre-auth prompts (`prompt_text`, `source`, n8n run metadata, optional `linked_profile_id`). RLS: service role for lifecycle; authenticated users can link prompts while `linked_profile_id` is null.
+- **agents** — catalog with `slug` (unique), marketing copy, pricing, optional `rating` (0–5), `success_rate` (0–100), `visibility agent_visibility`, and `profile_embedding vector(1536)`. Public read for `visibility = 'public'`; service role controls writes. `agent_tags`/`agent_tag_map` provide labelled weights (1–5) for scoring.
+- **agent_endorsements** — testimonial quotes keyed to agents. Public reads permitted when the parent agent is public; writes via service role.
+- **comparison_sessions** — recommendation runs tied to `profiles` or `anonymous_prompts` with optional `filter_payload jsonb`. **comparison_candidates** stores per-agent fit scores (0–100) and `reasons text[]`. Owners (by `profile_id`) can view their sessions/candidates; service role mutates data.
+- **waitlist_entries** — captures hire intent with optional `email_override` for anonymous flows and `status waitlist_status` defaulting to `new`. Service role only.
+- **integration_events** — append-only telemetry (`provider`, `event_type`, `payload`, `status in ('success','error')`, optional `reference_id`) with supporting indexes. Service role only.
+- Shared helper `auth_is_service_role()` wraps `auth.role() = 'service_role'` to simplify policy checks across migrations.
 
 ## Testing & Quality Gates
 - `vitest.config.ts` targets `tests/**/*.{test,spec}.{ts,tsx}` inside a JSDOM environment with global APIs enabled. Only `tests/unit/utils.test.ts` exists, covering the `cn` helper’s merging behaviour.
