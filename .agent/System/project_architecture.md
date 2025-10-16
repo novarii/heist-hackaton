@@ -11,6 +11,7 @@
 - **State**: Client-only Zustand slice (`stores/useAgentStore.ts`) prepared for agent state but currently unused.
 - **Utilities**: `date-fns` for relative timestamps; `clsx` + `tailwind-merge` exposed via `lib/utils.ts`; Supabase access handled through `@supabase/ssr` (App Router session client) and `@supabase/supabase-js` (service-role operations).
 - **Tooling**: ESLint 9 (flat config), Vitest 3, Playwright 1.55, pnpm 8.15.6, PostCSS with `@tailwindcss/postcss`.
+- **Package management**: `pnpm-lock.yaml` is the single source of dependency truth; npm/yarn lockfiles are removed during audits to avoid drift.
 
 ## Application Structure
 ### Layouts & Routing

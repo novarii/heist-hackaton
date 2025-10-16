@@ -2,12 +2,14 @@
 
 ### System
 - `System/project_architecture.md` – Comprehensive architecture snapshot covering product scope, route hierarchy, styling system, Supabase readiness, and current housekeeping risks.
+- `System/npm-list.md` – Historical npm dependency tree retained for comparing versions against the pnpm lockfile.
 
 ### SOP
 - `SOP/debug-vitest-runner-failure.md` – Diagnose and unblock Vitest runner import resolution issues.
 - `SOP/resolve-react-version-mismatch.md` – Reconcile React version drift across lockfiles and package managers.
 - `SOP/isolate-client-handlers-from-server-components.md` – Best practices for keeping client handlers out of Server Components.
 - `SOP/tailwind-custom-utility-regression.md` – Playbook for migrating Tailwind 4 custom utilities and restoring missing gradients/textures.
+- `SOP/standardise-package-management.md` – Steps to keep pnpm the canonical package manager and prevent lockfile drift.
 
 ### Tasks & Postmortems
 - `Tasks/dependency-version-update.md` – Notes from the 2025-10-14 upgrade to Next 15, React 19, Tailwind 4, and supporting tooling.
@@ -18,4 +20,4 @@
 - `Tasks/backend-schema-api-plan.md` – Backend Supabase schema plan with phased API rollout milestones.
 - `Tasks/landing-n8n-webhook.md` – Notes on integrating the landing prompt flow with the n8n webhook pipeline.
 
-Last updated: Recorded Phase 2 Supabase service clients, n8n webhook helper, and prompt cookie utilities.
+Last updated: Documented pnpm standardisation and archived the npm dependency snapshot used during the cleanup audit.
