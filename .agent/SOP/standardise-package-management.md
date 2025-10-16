@@ -9,7 +9,7 @@ Keep dependency resolution consistent by making pnpm the single package manager 
 - Before handing off the project to new contributors or CI pipelines.
 
 ## Prerequisites
-- pnpm `>=8.15.6` installed locally (`corepack enable` or `npm install -g pnpm`).
+- pnpm `>=10.18.3` installed locally (`corepack use pnpm@10.18.3` or `npm install -g pnpm@10.18.3`).
 - Ability to delete and regenerate lockfiles.
 
 ## Procedure
@@ -28,7 +28,7 @@ Keep dependency resolution consistent by making pnpm the single package manager 
    ```
    This preserves `node_modules/` cleanliness during audits.
 4. **Verify metadata**
-   - `package.json` contains `"packageManager": "pnpm@<expected version>"`.
+   - `package.json` contains `"packageManager": "pnpm@10.18.3"`.
    - `pnpm-lock.yaml` is present and staged.
 5. **Optional: refresh local dependencies**
    ```bash

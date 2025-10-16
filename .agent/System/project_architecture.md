@@ -10,8 +10,8 @@
 - **Styling**: Tailwind CSS `4.1.14` using the CSS-first pipeline (`@import "tailwindcss"`) plus `tailwind-merge` to dedupe classes. A legacy `tailwindcss-textshadow` dependency remains installed but utility classes are now provided manually in CSS.
 - **State**: Client-only Zustand slice (`stores/useAgentStore.ts`) prepared for agent state but currently unused.
 - **Utilities**: `date-fns` for relative timestamps; `clsx` + `tailwind-merge` exposed via `lib/utils.ts`; Supabase access handled through `@supabase/ssr` (App Router session client) and `@supabase/supabase-js` (service-role operations).
-- **Tooling**: ESLint 9 (flat config), Vitest 3, Playwright 1.55, pnpm 8.15.6, PostCSS with `@tailwindcss/postcss`.
-- **Package management**: `pnpm-lock.yaml` is the single source of dependency truth; npm/yarn lockfiles are removed during audits to avoid drift.
+- **Tooling**: ESLint 9 (flat config), Vitest 3, Playwright 1.55, pnpm 10.18.3, PostCSS with `@tailwindcss/postcss`.
+- **Package management**: `pnpm-lock.yaml` is the single source of dependency truth; npm/yarn lockfiles are removed during audits to avoid drift. `pnpm-workspace.yaml` pins `onlyBuiltDependencies` so heavy native packages build only when needed.
 
 ## Application Structure
 ### Layouts & Routing

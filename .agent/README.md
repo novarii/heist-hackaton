@@ -20,4 +20,4 @@
 - `Tasks/backend-schema-api-plan.md` – Backend Supabase schema plan with phased API rollout milestones.
 - `Tasks/landing-n8n-webhook.md` – Notes on integrating the landing prompt flow with the n8n webhook pipeline.
 
-Last updated: Documented pnpm standardisation and archived the npm dependency snapshot used during the cleanup audit.
+Last updated: Raised pnpm baseline to 10.18.3 and refreshed the package management SOP to match.
