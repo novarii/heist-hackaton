@@ -1,76 +1,74 @@
 # Project Architecture
 
-## Goal & Product Posture
-The codebase scaffolds a marketing-to-console funnel for the Heist AI agent marketplace. Public copy refers to “Merak Intelligence” while protected surfaces still display “Heist Console”, signalling an in-progress rebrand. The current implementation centres on a cinematic landing page, a guided onboarding checklist, and a stubbed agent dashboard that will eventually sit on top of Supabase-backed orchestration services.
+## Product & Scope
+- Marketing funnel introduces the “Merak” brand while the authenticated console still displays “Heist Console”, highlighting an ongoing rebrand.
+- Core journey today: `/` → `redirect("/landing")` → cinematic landing hero → static onboarding checklist (`/onboarding`) → stubbed agents dashboard (`/agents`).
+- Supabase is the planned backend (auth, Postgres, Edge Functions) but no runtime integration has shipped yet; pages render purely static copy.
 
 ## Tech Stack Snapshot
-- **Runtime**: Next.js `15.5.4` (App Router) with React `19.2.0` and TypeScript `5.9.3` in strict mode.
-- **Styling**: Tailwind CSS `4.1.14` (CSS-first pipeline) with custom utilities defined via `@theme`/`@utility` and `tailwind-merge`.
-- **State**: Zustand `5.0.8` slices for client-side data.
-- **Date utilities**: `date-fns` `3.6.0` for formatting in agent cards.
-- **Tooling**: ESLint `9.36.0`, Vitest `3.0.0`, Playwright `1.55.1`, pnpm `8.15.6`.
-- **Backend targets**: Supabase (Auth, Postgres, Edge Functions) – not yet wired.
-- **Images**: Next Image with SVG allowance enabled through `next.config.ts`.
+- **Runtime**: Next.js `15.5.4` (App Router) with React `19.2.0` and strict TypeScript `5.9.3`.
+- **Styling**: Tailwind CSS `4.1.14` using the CSS-first pipeline (`@import "tailwindcss"`) plus `tailwind-merge` to dedupe classes. A legacy `tailwindcss-textshadow` dependency remains installed but utility classes are now provided manually in CSS.
+- **State**: Client-only Zustand slice (`stores/useAgentStore.ts`) prepared for agent state but currently unused.
+- **Utilities**: `date-fns` for relative timestamps in agent cards; `clsx` + `tailwind-merge` exposed through `lib/utils.ts`.
+- **Tooling**: ESLint 9 (flat config), Vitest 3, Playwright 1.55, pnpm 8.15.6, PostCSS with `@tailwindcss/postcss`.
 
-## Application Architecture
-### Routing & Layouts
-- **Root layout (`app/layout.tsx`)** sets HTML metadata, registers Google-hosted Space Grotesk and Cormorant Garamond fonts, and applies global Tailwind styles via `app/globals.css`.
-- **Route groups** split surfaces by access:
-  - `app/(public)` – marketing pages (currently only `/landing`).
-  - `app/(auth)` – onboarding flow gated by future auth.
-  - `app/(protected)` – console surfaces visible post-auth.
-- **`app/page.tsx`** immediately `redirect("/landing")` to keep `/` URL thin.
-- Group layouts provide shell chrome: public is a simple wrapper, auth/protected render dark shells with console stylings.
+## Application Structure
+### Layouts & Routing
+- `app/layout.tsx` registers Google Space Grotesk (`--font-saprona`) and Cormorant Garamond (`--font-garamond`), applies `globals.css`, and sets site metadata.
+- Route groups segment surfaces:
+  - `app/(public)` – marketing shell (`layout.tsx`) that simply wraps children.
+  - `app/(auth)` – onboarding layout with dark background.
+  - `app/(protected)` – authenticated console chrome with header and content container.
+- `app/page.tsx` redirects to `/landing` ensuring the root path stays slim.
 
-### Feature Surfaces
-- **Landing (`app/(public)/landing/page.tsx`)** composes:
-  - `LandingHeader` – fixed navigation with placeholder links and a brand wordmark.
-  - `HeroSection` – gradient-backed hero with decorative dust overlays, glowing ellipse assets, and the `PromptInput` component with an inert agent selector toggle.
-  - `BottomSection` – glassmorphism container intended for future agent marketplace listings.
-- **Onboarding (`app/(auth)/onboarding/page.tsx`)** presents static checklist cards describing Supabase setup and agent blueprint selection, with CTA links to `/agents` or back to `/landing`.
-- **Agents dashboard (`app/(protected)/agents/page.tsx`)** renders two demo agents using shared `AgentCard` components. Data is hard-coded; persisted state will replace this later.
+### Key Surfaces
+- **Landing (`app/(public)/landing/page.tsx`)**
+  - `LandingHeader.tsx` (client) renders fixed navigation linking to placeholder routes.
+  - `HeroSection.tsx` paints gradient + dust backgrounds, overlays ellipse imagery, and mounts `PromptInput` with `showAgentSelector` toggled.
+  - `BottomSection.tsx` creates a glassmorphism container ready for agent cards; content placeholder is commented for future population.
+  - A legacy backup snapshot (`page.tsx.backup`) includes an older marketing layout and should be pruned once no longer needed.
+- **Onboarding (`app/(auth)/onboarding/page.tsx`)** – static Supabase setup checklist with CTAs to `/agents` and `/landing`.
+- **Agents dashboard (`app/(protected)/agents/page.tsx`)** – maps a local constant to `AgentCard` components, simulating agent health data.
 
 ### Shared Modules
-- `components/PromptInput.tsx` – client component managing local text state, optional agent selector pill, and decorative chain imagery sourced from `public/landing`. Submission is a no-op unless `onSubmit` is injected.
-- `components/AgentCard.tsx` – presentation card supporting `marketing` and `dashboard` variants, using `formatDistanceToNow` when a `lastRun` timestamp is provided.
-- `stores/useAgentStore.ts` – Zustand slice with `addAgent` and `updateStatus` helpers; currently unused by any page.
-- `lib/utils.ts` – Tailwind-aware `cn` helper built on `clsx` + `tailwind-merge`.
-- `lib/hooks/useIsClient.ts` – Hydration guard hook (currently unused but ready for SSR-sensitive logic).
+- `components/PromptInput.tsx` – client component holding prompt text, optional agent selector state, and submission handler (`onSubmit`) for future integrations. Decorative chain images come from `public/landing`.
+- `components/AgentCard.tsx` – supports `marketing`/`dashboard` variants with variant-specific Tailwind tone. Uses `formatDistanceToNow` when `lastRun` is supplied.
+- `lib/utils.ts` – `cn` helper combining `clsx` and `tailwind-merge`.
+- `lib/hooks/useIsClient.ts` – hydration guard returning `true` after mount; currently unused.
+- `stores/useAgentStore.ts` – Zustand store with `agents`, `addAgent`, and `updateStatus` helpers ready for Supabase-backed data.
 
-## Styling System & Assets
-- Tailwind 4 is configured via `@import "tailwindcss";` in `app/globals.css`. Palette and typography tokens remain in `tailwind.config.ts`, while custom background and text-shadow utilities now live in CSS: `@theme` defines tokens and `@utility` maps the legacy class names (`bg-dust-pattern`, `bg-red-white-gradient`, `text-shadow-hero`) so the dust overlay and gradients render correctly at runtime (see `.agent/Tasks/fix-dust-overlay.md` for the original regression).
-- Background art and icons live under `public/landing/`. Matching `.png` assets support Next Image usage in the hero.
-- Fonts default to CSS variables `--font-saprona` / `--font-garamond`; actual licensed Saprona faces are pending. Body copy forces dark background `#1B1D21`.
-
-## State, Data & Integrations
-- No remote data fetching or Supabase client integration exists today. All pages use static props or local state.
-- Supabase directory structure (`supabase/migrations`, `supabase/functions`, `supabase/types`) is present with `.gitkeep` placeholders only. `supabase/README.md` outlines the expected workflows.
-- Environment variables required for future Supabase work are documented in `.env.example`.
+## Styling & Assets
+- `app/globals.css` defines theme tokens via `@theme` (dust pattern, gradient, hero text-shadow) and exposes matching classes with `@utility`. Body styling locks the dark palette (`#1B1D21`) and sets font variables.
+- `tailwind.config.ts` scopes content to `app/`, `components/`, and `lib/`; extends palette with `brand.orange.900` and several neutral tones; registers `saprona` and `garamond` font families and a custom `backdropBlur`.
+- Marketing imagery resides under `public/landing/` (`dust.png`, chain PNGs, ellipse PNGs, arrow SVG). Next Image is configured to allow SVG sources via `next.config.ts`.
 
 ## Configuration & Tooling
-- `tsconfig.json` defines path aliases for `components/*`, `lib/*`, and `stores/*`.
-- `next.config.ts` permits SVG images, forces attachment disposition, and enforces a restrictive image CSP.
-- ESLint uses the flat config (`eslint.config.mjs`) with `FlatCompat` to ingest Next presets and disables `react/jsx-props-no-spreading`.
-- PostCSS pipeline delegates to `@tailwindcss/postcss`.
+- `next.config.ts` enables `reactStrictMode`, allows SVGs, defaults image downloads to attachment disposition, and enforces a restrictive image CSP (`script-src 'none'; sandbox`).
+- `tsconfig.json` adds aliases for `components/*`, `lib/*`, `stores/*`, and a project-root `@/*`.
+- `eslint.config.mjs` uses `FlatCompat` to pull `next/core-web-vitals` and `next/typescript`, disables `react/jsx-props-no-spreading`, and ignores build artifacts.
+- `postcss.config.js` delegates processing to `@tailwindcss/postcss`.
 
-## Testing
-- Vitest (`vitest.config.ts`) targets `tests/**/*.{test,spec}.{ts,tsx}` with a JSDOM environment. The lone test (`tests/unit/utils.test.ts`) verifies `cn` behaviour. A Vitest 3 runner issue is documented in `.agent/Tasks/dependency-version-update.md` – suite exits early under certain flags.
-- Playwright configuration (`tests/e2e/playwright.config.ts`) is prepared for Chromium smoke suites but has no actual tests yet.
-- Linting via `pnpm lint` is the primary CI guardrail today.
+## Data & Supabase Readiness
+- `.env.example` expects `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_SECRET_KEY`; legacy anon/service-role keys remain commented for migration reference.
+- Supabase scaffolding (`supabase/migrations`, `supabase/functions`, `supabase/types`) is empty aside from directory placeholders, signalling no schema or edge functions yet.
+- `supabase/README.md` covers the intended workflow for migrations and type generation. Regenerate types with `pnpm supabase gen types` once schemas exist.
+- Database schema is currently undefined. Planned entities include agents, tags, waitlist captures, and telemetry tables; add migrations + documentation when designs are finalised.
 
-## Database Schema Status
-No SQL migrations or database tables are defined. Planned entities include `agents`, related tags, waitlist captures, and session telemetry, but they remain speculative until Supabase integration begins. Schema work should be accompanied by new SOPs once prioritised.
+## Testing & Quality Gates
+- `vitest.config.ts` targets `tests/**/*.{test,spec}.{ts,tsx}` inside a JSDOM environment with global APIs enabled. Only `tests/unit/utils.test.ts` exists, covering the `cn` helper’s merging behaviour.
+- `tests/e2e/playwright.config.ts` configures a Chromium project with first-retry tracing; no Playwright specs have landed.
+- Linting (`pnpm lint`) is the primary guardrail. Tailwind’s CSS-first pipeline can surface import issues similar to the regression documented in `.agent/Tasks/fix-dust-overlay.md`.
 
-## Outstanding Gaps & Housekeeping
-- **Visual QA**: confirm the restored dust overlay and gradients across responsive breakpoints and capture artifacts for regression tests.
-- **Brand consistency**: align naming across marketing (“Merak”), console (“Heist”), and metadata to avoid user confusion.
-- **Unused scaffolding**: `stores/useAgentStore.ts`, `lib/hooks/useIsClient.ts`, and empty root files (`handles`, `merges`, `vitest`) are safe to prune or wire up when functionality lands.
-- **Static assets**: `app/(public)/landing/page.tsx.backup` and the stray `82cf973b-b4a0-4126-a2aa-3646a4baac48.svg:Zone.Identifier` file appear to be export artefacts; remove or document if not required.
-- **Testing**: expand Vitest coverage beyond the `cn` helper and stabilise the runner before enabling on CI.
+## Housekeeping & Observations
+- Placeholder files (`handles/handles`, `merges/merges`, `heist-hackaton@0.0.1`, `vitest/vitest`) are zero-byte markers; confirm whether they are required or remove to reduce clutter.
+- `lib/hooks/useIsClient.ts` and `stores/useAgentStore.ts` are unused; integrate or trim to avoid dead code once Supabase wiring begins.
+- Landing copy still references Lorem Ipsum and placeholder links; replace with production messaging alongside Supabase integration.
+- Visual QA should confirm the dust pattern and gradients across breakpoints; capture baselines for future regression testing.
 
 ## Related Docs
-- `.agent/README.md` – Entry point for all project documentation.
-- `README.md` – Repository overview and onboarding steps.
+- `.agent/README.md` – Documentation index.
+- `README.md` – High-level repository overview and setup steps.
 - `.agent/Tasks/dependency-version-update.md` – Notes on the 2025-10-14 dependency uplift.
-- `.agent/Tasks/fix-dust-overlay.md` – Investigation into Tailwind background/gradiant utilities.
-- `supabase/README.md` – Expected workflow once Supabase integration begins.
+- `.agent/Tasks/fix-dust-overlay.md` – Tailwind background utility investigation and fix history.
+- `.agent/SOP/tailwind-custom-utility-regression.md` – Playbook for repairing Tailwind 4 utility regressions.
+- `supabase/README.md` – Supabase directory workflow.

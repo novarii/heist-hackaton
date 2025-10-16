@@ -12,7 +12,7 @@ export default function OnboardingPage() {
         <div className="rounded-lg border border-zinc-800 bg-zinc-900/60 p-6">
           <h2 className="text-xl font-medium text-zinc-100">Supabase integration</h2>
           <p className="mt-2 text-sm text-zinc-400">
-            Provide your project reference, anon key, and service role through
+            Provide your project reference, publishable key, and secret key through
             environment variables to unlock migrations and edge functions.
           </p>
         </div>

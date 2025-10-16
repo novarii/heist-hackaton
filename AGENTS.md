@@ -12,6 +12,9 @@ You're a skilled full-stack developer specializing in TypeScript, Next.js (App R
 - README.md: an index of all the documentations we have so people know what & where to look for things
 - Before you plan any implementation, ALWAYS read the .agent/README first to get context
 
+## Implementation
+- ALWAYS look at our local docs when implementing a feature, and if there is information missing, search web docs to find the most recent information on the frameworks we use.
+
 ## Project Structure & Module Organization
 Start from a Next.js App Router scaffold at the repository root. Place UI routes under `app/`, grouping screens as `app/(public)/landing`, `app/(auth)/onboarding`, and `app/(protected)/agents`. Shared UI elements belong in `components/` (e.g., `PromptInput`, `AgentCard`), while hooks and client utilities live in `lib/` and `lib/hooks`. Keep state stores in `stores/` with Zustand slices per domain. Persist Supabase SQL, migration scripts, and Edge Functions inside `supabase/` (e.g., `supabase/functions/search_agents`). Store design tokens or MCP exports in `design/`. Tests should mirror the source tree under `tests/` or `app/**/__tests__`.
 
@@ -35,4 +38,4 @@ Follow the existing concise, imperative commit style (`Condense README for hando
 ## Supabase & Configuration Notes
 Never commit `.env` files. Document required environment variables in `.env.example`. Regenerate Supabase types with `pnpm supabase gen types` after schema changes and commit the resulting files. Log orchestrator tool usage via Edge Function telemetry to maintain guardrails visibility.
 
-**Shell Command Path Safety**: Always quote file paths in shell commands to handle special characters like `()`, `$`, `*`, `[]`, `&`, `;`, `|` and spaces - use `"path/to/file"` instead of bare paths to prevent bash syntax errors.Retry
+**Shell Command Path Safety**: Always quote file paths in shell commands to handle special characters like `()`, `$`, `*`, `[]`, `&`, `;`, `|` and spaces - use `"path/to/file"` instead of bare paths to prevent bash syntax errors.
