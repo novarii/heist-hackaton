@@ -9,8 +9,8 @@ const __dirname = dirname(__filename);
 const compat = new FlatCompat({ baseDirectory: __dirname });
 const compatConfigs = compat.extends("next/core-web-vitals", "next/typescript");
 
-export default [
-  ...fixupConfigRules(...compatConfigs),
+const config = [
+  ...fixupConfigRules(compatConfigs),
   {
     settings: {
       react: {
@@ -25,3 +25,5 @@ export default [
     ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
 ];
+
+export default config;

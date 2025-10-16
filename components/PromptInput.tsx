@@ -13,7 +13,7 @@ type PromptInputProps = {
 
 export default function PromptInput({
   placeholder = "Ask Merak to hire you your new accountant...",
-  submitLabel: _submitLabel,
+  submitLabel = "Send prompt",
   defaultValue = "",
   showAgentSelector = false,
   onSubmit,
@@ -82,6 +82,10 @@ export default function PromptInput({
           ) : null}
         </div>
       </div>
+
+      <button type="submit" className="sr-only">
+        {submitLabel}
+      </button>
 
       <div className="pointer-events-none absolute -left-32 -top-16 size-80">
         <Image src="/landing/chain-left.png" alt="" fill className="object-contain" />
