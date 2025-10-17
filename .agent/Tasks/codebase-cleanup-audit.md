@@ -31,7 +31,7 @@
 - Drop `tailwindcss-textshadow` from dependencies and lockfiles, then run `pnpm lint` to verify no missing utilities.
 - Document the custom utility approach in `.agent/SOP/tailwind-custom-utility-regression.md`.
 
-### 5. Standardise package management (Priority: High)
+### 5. Standardise package management (Priority: High) [SOLVED]
 - Delete `package-lock.json`, stop ignoring `pnpm-lock.yaml`, regenerate the pnpm lockfile, and commit it per SOP.
 - Audit CI scripts to ensure they call `pnpm install` and not npm/yarn.
 
