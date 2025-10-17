@@ -15,6 +15,10 @@ You're a skilled full-stack developer specializing in TypeScript, Next.js (App R
 ## Implementation
 - ALWAYS look at our local docs when implementing a feature, and if there is information missing, search web docs to find the most recent information on the frameworks we use.
 
+## Planning Guidance
+- Whenever you're prompted to plan an implementation for a feature, ask follow-up clarifying questions to resolve any ambiguities before proceeding.
+- Whenever you're planning or implementing, always refer to the live docs (context 7) to ensure you are aligned with the latest project information.
+
 ## Project Structure & Module Organization
 Start from a Next.js App Router scaffold at the repository root. Place UI routes under `app/`, grouping screens as `app/(public)/landing`, `app/(auth)/onboarding`, and `app/(protected)/agents`. Shared UI elements belong in `components/` (e.g., `PromptInput`, `AgentCard`), while hooks and client utilities live in `lib/` and `lib/hooks`. Keep state stores in `stores/` with Zustand slices per domain. Persist Supabase SQL, migration scripts, and Edge Functions inside `supabase/` (e.g., `supabase/functions/search_agents`). Store design tokens or MCP exports in `design/`. Tests should mirror the source tree under `tests/` or `app/**/__tests__`.
 
